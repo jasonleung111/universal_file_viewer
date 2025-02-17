@@ -1,39 +1,82 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+UniversalFileViewer
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/tools/pub/writing-package-pages).
+A Flutter package to preview various file types, including images, videos, PDFs, Word, Excel, CSV, and PowerPoint files on Android and iOS.
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/to/develop-packages).
--->
+Features
+✅ Image preview (JPG, PNG, GIF, BMP, TIFF)
+✅ Video playback (MP4, AVI, MOV, MKV)
+✅ PDF viewer✅ Word documents (.doc, .docx)
+✅ Excel files (.xls, .xlsx)
+✅ CSV file preview
+✅ PowerPoint files (.ppt, .pptx)
+✅ Text files (.txt, .md)
+✅ Fallback to external app if unsupported
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+Installation
+Add this package to your pubspec.yaml:
+dependencies:
+  universal_file_viewer: latest_version
 
-## Features
+Run
+flutter pub get
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+Usage
+Import the packageimport 'package:universal_file_viewer/universal_file_viewer.dart';
 
-## Getting started
+Basic Usage
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+UniversalFileViewer(filePath: '/path/to/your/file');
 
-## Usage
+Example
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+import 'package:flutter/material.dart';
+import 'package:universal_file_viewer/universal_file_viewer.dart';
 
-```dart
-const like = 'sample';
-```
+void main() {
+  runApp(MyApp());
+}
 
-## Additional information
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: Text('Universal File Viewer')),
+        body: Center(
+          child: UniversalFileViewer(filePath: '/storage/emulated/0/Download/sample.pdf'),
+        ),
+      ),
+    );
+  }
+}
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+File Type Detection
+
+Internally, the package determines the file type based on its extension:
+
+FileType detectFileType(String path);
+
+Supported file formats:
+Images: .jpg, .jpeg, .png, .gif, .bmp, .tiff
+Videos: .mp4, .avi, .mov, .mkv
+Documents: .pdf, .doc, .docx
+
+
+Dependencies
+
+This package leverages: 
+file_picker for file selection
+open_filex for opening unsupported files in external apps
+video_player for video playback
+syncfusion_flutter_pdfviewer for PDF preview
+flutter_office_viewer for Word, Excel, and PowerPoint files
+
+Future Enhancements
+✅ Web support
+✅ Better UI customization
+✅ Encrypted file handling
+
+
+LicenseThis project is licensed under the MIT License - see the LICENSE file for details.
+ContributingContributions are welcome! Feel free to submit issues and pull requests.
+⭐ If you like this package, consider giving it a star on [GitHub](https://github.com/Shonu72/universal_file_viewer)! 🚀
