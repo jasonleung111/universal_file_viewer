@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:open_filex/open_filex.dart';
+import 'package:open_file/open_file.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:universal_file_viewer/src/video_player_preview.dart';
 
@@ -31,7 +31,7 @@ class UniversalFileViewer extends StatelessWidget {
       default:
         return Center(
           child: ElevatedButton(
-            onPressed: () => OpenFilex.open(filePath),
+            onPressed: () => OpenFile.open(filePath),
             child: const Text('Open in external app'),
           ),
         );
