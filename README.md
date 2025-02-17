@@ -21,14 +21,15 @@ Run
 flutter pub get
 
 Usage
+```
 Import the packageimport 'package:universal_file_viewer/universal_file_viewer.dart';
 
 Basic Usage
-
+```
 UniversalFileViewer(filePath: '/path/to/your/file');
 
 Example
-
+```
 import 'package:flutter/material.dart';
 import 'package:universal_file_viewer/universal_file_viewer.dart';
 
@@ -54,6 +55,7 @@ File Type Detection
 
 Internally, the package determines the file type based on its extension:
 
+```
 FileType detectFileType(String path);
 
 Supported file formats:
