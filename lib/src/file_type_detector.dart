@@ -4,23 +4,24 @@ import 'package:path/path.dart' as p;
 
 enum FileType { image, video, pdf, word, excel, csv, ppt, text, unknown }
 
-  /// Detect the file type of the given file path.
-  ///
-  /// The function supports the following file types:
-  /// - image: .jpg, .jpeg, .png, .gif, .bmp, .tiff
-  /// - video: .mp4, .avi, .mov, .mkv
-  /// - pdf: .pdf
-  /// - word: .doc, .docx
-  /// - excel: .xls, .xlsx
-  /// - csv: .csv
-  /// - ppt: .ppt, .pptx
-  /// - text: .txt, .md
-  /// - unknown: any other file type
-  ///
+/// Detect the file type of the given file path.
+///
+/// The function supports the following file types:
+/// - image: .jpg, .jpeg, .png, .gif, .bmp, .tiff
+/// - video: .mp4, .avi, .mov, .mkv
+/// - pdf: .pdf
+/// - word: .doc, .docx
+/// - excel: .xls, .xlsx
+/// - csv: .csv
+/// - ppt: .ppt, .pptx
+/// - text: .txt, .md
+/// - unknown: any other file type
+///
 FileType detectFileType(String path) {
   final String extension = p.extension(path).toLowerCase();
 
-  if (<String>['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff'].contains(extension)) {
+  if (<String>['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff']
+      .contains(extension)) {
     return FileType.image;
   } else if (<String>['.mp4', '.avi', '.mov', '.mkv'].contains(extension)) {
     return FileType.video;
