@@ -19,10 +19,10 @@ class FileViewerScreen extends StatefulWidget {
   const FileViewerScreen({super.key});
 
   @override
-  _FileViewerScreenState createState() => _FileViewerScreenState();
+  FileViewerScreenState createState() => FileViewerScreenState();
 }
 
-class _FileViewerScreenState extends State<FileViewerScreen> {
+class FileViewerScreenState extends State<FileViewerScreen> {
   String? _filePath;
 
   Future<void> _pickFile() async {

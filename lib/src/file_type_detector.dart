@@ -1,25 +1,40 @@
+// ignore_for_file: public_member_api_docs
+
 import 'package:path/path.dart' as p;
 
 enum FileType { image, video, pdf, word, excel, csv, ppt, text, unknown }
 
+  /// Detect the file type of the given file path.
+  ///
+  /// The function supports the following file types:
+  /// - image: .jpg, .jpeg, .png, .gif, .bmp, .tiff
+  /// - video: .mp4, .avi, .mov, .mkv
+  /// - pdf: .pdf
+  /// - word: .doc, .docx
+  /// - excel: .xls, .xlsx
+  /// - csv: .csv
+  /// - ppt: .ppt, .pptx
+  /// - text: .txt, .md
+  /// - unknown: any other file type
+  ///
 FileType detectFileType(String path) {
-  final extension = p.extension(path).toLowerCase();
+  final String extension = p.extension(path).toLowerCase();
 
-  if (['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff'].contains(extension)) {
+  if (<String>['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff'].contains(extension)) {
     return FileType.image;
-  } else if (['.mp4', '.avi', '.mov', '.mkv'].contains(extension)) {
+  } else if (<String>['.mp4', '.avi', '.mov', '.mkv'].contains(extension)) {
     return FileType.video;
   } else if (extension == '.pdf') {
     return FileType.pdf;
-  } else if (['.doc', '.docx'].contains(extension)) {
+  } else if (<String>['.doc', '.docx'].contains(extension)) {
     return FileType.word;
-  } else if (['.xls', '.xlsx'].contains(extension)) {
+  } else if (<String>['.xls', '.xlsx'].contains(extension)) {
     return FileType.excel;
   } else if (extension == '.csv') {
     return FileType.csv;
-  } else if (['.ppt', '.pptx'].contains(extension)) {
+  } else if (<String>['.ppt', '.pptx'].contains(extension)) {
     return FileType.ppt;
-  } else if (['.txt', '.md'].contains(extension)) {
+  } else if (<String>['.txt', '.md'].contains(extension)) {
     return FileType.text;
   } else {
     return FileType.unknown;
