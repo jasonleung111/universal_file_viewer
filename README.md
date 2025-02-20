@@ -19,14 +19,10 @@ Add this package to your pubspec.yaml:
 dependencies:
   universal_file_viewer: latest_version
 
-Then
-
 ```
 run:
 flutter pub get
 ```
-
-Usage
 
 Example
 ```
