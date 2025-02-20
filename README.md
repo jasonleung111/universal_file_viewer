@@ -21,7 +21,7 @@ dependencies:
   universal_file_viewer: latest_version
 
 ```
-
+```
 Example
 UniversalFileViewer(filePath: '/sample.pdf'),
 
