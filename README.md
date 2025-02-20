@@ -1,15 +1,15 @@
 UniversalFileViewer - A Flutter package to preview various file types, including images, videos, PDFs, Word, Excel, CSV, and PowerPoint files on Android and iOS.
 
 ```
-Features✅ Image preview (JPG, PNG, GIF, BMP, TIFF)<br />
-✅ Video playback (MP4, AVI, MOV, MKV)<br />
-✅ PDF viewer<br />
-✅ Word documents (.doc, .docx)<br />
-✅ Excel files (.xls, .xlsx)<br />
-✅ CSV file preview<br />
-✅ PowerPoint files (.ppt, .pptx)<br />
-✅ Text files (.txt, .md)<br />
-✅ Fallback to external app if unsupported<br />
+Features✅ Image preview (JPG, PNG, GIF, BMP, TIFF)
+✅ Video playback (MP4, AVI, MOV, MKV)
+✅ PDF viewer
+✅ Word documents (.doc, .docx)
+✅ Excel files (.xls, .xlsx)
+✅ CSV file preview
+✅ PowerPoint files (.ppt, .pptx)
+✅ Text files (.txt, .md)
+✅ Fallback to external app if unsupported
 ```
 
 ##Installation
@@ -17,17 +17,16 @@ Features✅ Image preview (JPG, PNG, GIF, BMP, TIFF)<br />
 Add this package to your pubspec.yaml:
 ```
 dependencies:
-  universal_file_viewer: latest_versionThen, 
+  universal_file_viewer: latest_version
+
+Then
 
 ```
 run:
 flutter pub get
+```
 
 Usage
-
-Import the packageimport 'package:universal_file_viewer/universal_file_viewer.dart';
-
-Basic UsageUniversalFileViewer(filePath: '/path/to/your/file');
 
 Example
 ```
@@ -59,18 +58,6 @@ Internally, the package determines the file type based on its extension:
 ```
 FileType detectFileType(String path);
 ```
-Supported File FormatsImages: .jpg, .jpeg, .png, .gif, .bmp, .tiff<br />
-Videos: .mp4, .avi, .mov, .mkv<br />
-Documents: .pdf, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .csv, .txt, .md<br />
-
-DependenciesThis package leverages:<br />
-
-file_picker for file selection<br />
-open_filex for opening unsupported files in external apps<br />
-video_player for video playback<br />
-syncfusion_flutter_pdfviewer for PDF preview<br />
-flutter_office_viewer for Word, Excel, and PowerPoint files<br />
-
 
 ##Future Enhancements<br />
 ✅ More file format support<br />
