@@ -2,14 +2,14 @@ UniversalFileViewer - A Flutter package to preview various file types, including
 
 ```
 Features
-✅ Image preview (JPG, PNG, GIF, BMP, TIFF)
+✅ Image preview (JPG, PNG, GIF, BMP, TIFF) 
 ✅ Video playback (MP4, AVI, MOV, MKV)
 ✅ PDF viewer
 ✅ Word documents (.doc, .docx)
-✅ Excel files (.xls, .xlsx)
-✅ CSV file preview
-✅ PowerPoint files (.ppt, .pptx)
-✅ Text files (.txt, .md)
+✅ Excel files (.xls, .xlsx) - Upcoming 
+✅ CSV file preview - Upcoming
+✅ PowerPoint files (.ppt, .pptx) - Upcoming
+✅ Text files (.txt, .md) - Upcoming
 ✅ Fallback to external app if unsupported
 ```
 
