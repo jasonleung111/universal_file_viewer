@@ -40,4 +40,4 @@ Contributions are welcome! Feel free to submit issues and pull requests.<br />
 
 ⭐ If you like this package, consider giving it a star on [Github](https://github.com/Shonu72/universal_file_viewer) 🚀 <br />
 
-⭐ [Buy me a coffee](buymeacoffee.com/zTnkNK3os7)🍵
+⭐ [Buy me a coffee](https://buymeacoffee.com/ztnknk3os7)🍵
