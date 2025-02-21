@@ -3,14 +3,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-/// A widget that displays a video from a file at the given [filePath].
-///
-/// The video is played automatically when initialized.
+/// A widget that displays a video from the given file path.
 class VideoPlayerWidget extends StatefulWidget {
-  /// The file path of the video to be played.
+  /// The path to the video file to display.
   final String filePath;
 
-  /// Creates a [VideoPlayerWidget] with the given [filePath].
+  /// Creates a [VideoPlayerWidget].
+  ///
+  /// The [filePath] parameter is required.
   const VideoPlayerWidget({super.key, required this.filePath});
 
   @override
@@ -19,41 +19,90 @@ class VideoPlayerWidget extends StatefulWidget {
 
 // ignore: public_member_api_docs
 class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
-  late VideoPlayerController _controller;
+  VideoPlayerController? _controller;
+  bool _isPlaying = true;
 
-  /// Initializes the state of the widget, setting up the video player and
-  /// playing the video at the file path provided in [widget.filePath].
   @override
   void initState() {
     super.initState();
+    _initializeVideo();
+  }
+
+  /// Reinitialize video when a new file is selected.
+  @override
+  void didUpdateWidget(covariant VideoPlayerWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.filePath != widget.filePath) {
+      _initializeVideo();
+    }
+  }
+
+  /// Initializes the video player.
+  void _initializeVideo() {
+    // Dispose of the old controller if it exists
+    _controller?.dispose();
+
+    // Create a new controller
     _controller = VideoPlayerController.file(File(widget.filePath))
       ..initialize().then((_) {
-        setState(() {});
-        _controller.play();
+        setState(() {}); // Refresh UI after initialization
+        _controller!.play(); // Auto-play new video
       });
   }
 
-  /// Returns a widget that displays a video from a file at the given
-  /// [widget.filePath].
-  ///
-  /// The widget is an [AspectRatio] of the video, with a
-  /// [CircularProgressIndicator] displayed until the video is initialized.
-  ///
-  /// The video is played automatically when initialized.
-  @override
-  Widget build(BuildContext context) {
-    return _controller.value.isInitialized
-        ? AspectRatio(
-            aspectRatio: _controller.value.aspectRatio,
-            child: VideoPlayer(_controller),
-          )
-        : const Center(child: CircularProgressIndicator());
+  /// Toggles play and pause on tap.
+  void _togglePlayPause() {
+    if (_controller == null) return;
+
+    setState(() {
+      if (_controller!.value.isPlaying) {
+        _controller!.pause();
+        _isPlaying = false;
+      } else {
+        _controller!.play();
+        _isPlaying = true;
+      }
+    });
   }
 
-  /// Disposes the video player controller and the state of the widget.
+  /// Builds the widget tree for the video player.
+  @override
+
+  /// Builds a video player widget.
+  ///
+  /// The widget is a [GestureDetector] that wraps a [VideoPlayer] in an
+  /// [AspectRatio] widget. When the video is not playing, a play arrow icon
+  /// is displayed centered on top of the video. If the video is not yet
+  /// initialized, a [CircularProgressIndicator] is displayed instead.
+  Widget build(BuildContext context) {
+    return Center(
+      child: _controller != null && _controller!.value.isInitialized
+          ? Stack(
+              alignment: Alignment.center,
+              children: <Widget>[
+                GestureDetector(
+                  onTap: _togglePlayPause,
+                  child: AspectRatio(
+                    aspectRatio: _controller!.value.aspectRatio,
+                    child: VideoPlayer(_controller!),
+                  ),
+                ),
+                if (!_isPlaying)
+                  const Icon(
+                    Icons.play_arrow,
+                    size: 60,
+                    color: Colors.white,
+                  ),
+              ],
+            )
+          : const Center(child: CircularProgressIndicator()),
+    );
+  }
+
+  /// Disposes the video player controller when the widget is removed from the widget tree.
   @override
   void dispose() {
-    _controller.dispose();
+    _controller?.dispose();
     super.dispose();
   }
 }
