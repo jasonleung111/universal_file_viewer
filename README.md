@@ -33,7 +33,7 @@ UniversalFileViewer(filePath: '/sample.pdf'),
 ✅ Better UI customization<br />
 ✅ Encrypted file handling<br />
 
-##License<br />
+## License<br />
 This project is licensed under the MIT License - see the LICENSE file for details.
 ContributingContributions are welcome! Feel free to submit issues and pull requests.
 ⭐ If you like this package, consider giving it a star on [Github](https://github.com/Shonu72/universal_file_viewer) 🚀
