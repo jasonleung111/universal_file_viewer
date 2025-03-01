@@ -5,11 +5,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:open_file/open_file.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+import 'package:universal_file_viewer/src/csv_file_preview.dart';
 import 'package:universal_file_viewer/src/excel_file_preview.dart';
-import 'package:universal_file_viewer/src/video_player_preview.dart';
 import 'package:universal_file_viewer/src/word_file_preview.dart';
-
-import 'file_type_detector.dart';
+import 'package:universal_file_viewer/universal_file_viewer.dart';
 
 class UniversalFileViewer extends StatelessWidget {
   final String filePath;
@@ -38,7 +37,8 @@ class UniversalFileViewer extends StatelessWidget {
         return WordViewer(filePath: filePath);
       case FileType.excel:
         return ExcelPreviewScreen(filePath: filePath);
-      // case FileType.csv:
+      case FileType.csv:
+        return CsvPreviewScreen(filePath: filePath);
       // case FileType.ppt:
       //   return OfficeFileViewer(filePath: filePath);
       default:

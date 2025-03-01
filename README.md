@@ -7,7 +7,7 @@ Features
 ✅ PDF viewer
 ✅ Word documents (.doc, .docx)
 ✅ Excel files (.xlsx)
-✅ CSV file preview - Upcoming
+✅ CSV file preview
 ✅ PowerPoint files (.ppt, .pptx) - Upcoming
 ✅ Text files (.txt, .md) - Upcoming
 ✅ Fallback to external app if unsupported

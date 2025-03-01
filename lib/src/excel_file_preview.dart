@@ -18,13 +18,8 @@ class ExcelPreviewScreen extends StatefulWidget {
   ExcelPreviewScreenState createState() => ExcelPreviewScreenState();
 }
 
-// ignore: public_member_api_docs
 class ExcelPreviewScreenState extends State<ExcelPreviewScreen> {
   /// The data read from the Excel file.
-  ///
-  /// This list contains the data from the Excel file, where each row is a
-  /// list of strings. The first row is the header, so the first element of
-  /// each row is the column name.
   List<List<String>> excelData = <List<String>>[];
 
   @override
@@ -41,8 +36,7 @@ class ExcelPreviewScreenState extends State<ExcelPreviewScreen> {
     }
   }
 
-  /// Reads the Excel file at [filePath] and updates [excelData] with the
-  /// data from the file.
+  /// Reads the Excel file at [filePath] and updates [excelData] with the data from the file.
   Future<void> readExcelFile(String filePath) async {
     try {
       File file = File(filePath);
@@ -66,37 +60,39 @@ class ExcelPreviewScreenState extends State<ExcelPreviewScreen> {
   }
 
   @override
-
-  /// Builds a [DataTable] widget to display the data from the Excel file.
-  ///
-  /// If the Excel file is empty, a [Center] widget with a [Text] widget
-  /// displaying the message "No Data Loaded" is returned.
-  ///
-  /// Otherwise, a [SingleChildScrollView] widget is returned with its
-  /// scroll direction set to [Axis.horizontal] so that the user can scroll
-  /// horizontally to view all the columns in the table. The table is
-  /// constructed from the data loaded from the Excel file. The first row is
-  /// used as the header, and each subsequent row is a data row. The columns
-  /// are also determined by the data in the first row.
-
   Widget build(BuildContext context) {
     return Scaffold(
       body: excelData.isNotEmpty
           ? SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              child: DataTable(
-                columns: excelData.first
-                    .map((String header) => DataColumn(label: Text(header)))
-                    .toList(),
-                rows: excelData.skip(1).map((List<String> row) {
-                  return DataRow(
-                    cells:
-                        row.map((String cell) => DataCell(Text(cell))).toList(),
-                  );
-                }).toList(),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight: MediaQuery.of(context).size.height * 0.8,
+                  ),
+                  child: DataTable(
+                    columnSpacing: 20.0, // Adjust spacing for better visibility
+                    border: TableBorder.all(),
+                    columns: excelData.first
+                        .map((String header) => DataColumn(label: Text(header)))
+                        .toList(),
+                    rows: excelData.skip(1).map((List<String> row) {
+                      return DataRow(
+                        cells: row
+                            .map((String cell) => DataCell(SizedBox(
+                                  width: 100, // Adjust cell width as needed
+                                  child: Text(cell,
+                                      overflow: TextOverflow.ellipsis),
+                                )))
+                            .toList(),
+                      );
+                    }).toList(),
+                  ),
+                ),
               ),
             )
-          : const Center(child: Text("Only XLXS files are supported")),
+          : const Center(child: Text("Only XLSX files are supported")),
     );
   }
 }
