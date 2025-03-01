@@ -18,6 +18,7 @@ class ExcelPreviewScreen extends StatefulWidget {
   ExcelPreviewScreenState createState() => ExcelPreviewScreenState();
 }
 
+// ignore: public_member_api_docs
 class ExcelPreviewScreenState extends State<ExcelPreviewScreen> {
   /// The data read from the Excel file.
   List<List<String>> excelData = <List<String>>[];
