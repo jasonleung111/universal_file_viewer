@@ -22,6 +22,7 @@ class _WordViewerState extends State<WordViewer> {
   List<Widget> docxContent = <Widget>[];
 
   @override
+
   /// Initializes the state by extracting the contents of the Word document.
   ///
   /// This method is called when the widget is first created. It calls the
@@ -36,12 +37,13 @@ class _WordViewerState extends State<WordViewer> {
   @override
   void didUpdateWidget(covariant WordViewer oldWidget) {
     super.didUpdateWidget(oldWidget);
-  /// Called when the [WordViewer] widget is updated with a new file path.
-  ///
-  /// This method is called when the [WordViewer] widget is updated with a new
-  /// file path. It checks if the file path has changed, and if so, it calls the
-  /// [_extractDocxContent] method to parse and display the contents of the
-  /// Word document at the new file path.
+
+    /// Called when the [WordViewer] widget is updated with a new file path.
+    ///
+    /// This method is called when the [WordViewer] widget is updated with a new
+    /// file path. It checks if the file path has changed, and if so, it calls the
+    /// [_extractDocxContent] method to parse and display the contents of the
+    /// Word document at the new file path.
     if (oldWidget.filePath != widget.filePath) {
       _extractDocxContent();
     }
@@ -238,6 +240,7 @@ class _WordViewerState extends State<WordViewer> {
   }
 
   @override
+
   /// Builds the widget tree for a DOCX viewer.
   ///
   /// This widget displays a [CircularProgressIndicator] until the content of
