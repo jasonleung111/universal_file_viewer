@@ -8,11 +8,11 @@ import 'package:flutter/material.dart';
 ///
 /// The widget reads the Excel file and displays its contents in a table.
 class ExcelPreviewScreen extends StatefulWidget {
-  /// The path to the Excel file to display.
-  final String filePath;
+  /// The Excel file to display.
+  final File file;
 
   /// Creates a [ExcelPreviewScreen] widget.
-  const ExcelPreviewScreen({super.key, required this.filePath});
+  const ExcelPreviewScreen({super.key, required this.file});
 
   @override
   ExcelPreviewScreenState createState() => ExcelPreviewScreenState();
@@ -26,29 +26,27 @@ class ExcelPreviewScreenState extends State<ExcelPreviewScreen> {
   @override
   void initState() {
     super.initState();
-    readExcelFile(widget.filePath);
+    readExcelFile(widget.file);
   }
 
   @override
   void didUpdateWidget(covariant ExcelPreviewScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.filePath != widget.filePath) {
-      readExcelFile(widget.filePath);
+    if (oldWidget.file != widget.file) {
+      readExcelFile(widget.file);
     }
   }
 
-  /// Reads the Excel file at [filePath] and updates [excelData] with the data from the file.
-  Future<void> readExcelFile(String filePath) async {
+  /// Reads the Excel file at [file] and updates [excelData] with the data from the file.
+  Future<void> readExcelFile(File file) async {
     try {
-      File file = File(filePath);
       Uint8List fileBytes = await file.readAsBytes();
       Excel excel = Excel.decodeBytes(fileBytes);
       List<List<String>> tempData = <List<String>>[];
 
       for (String table in excel.tables.keys) {
         for (List<Data?> row in excel.tables[table]!.rows) {
-          tempData.add(
-              row.map((Data? cell) => cell?.value.toString() ?? "").toList());
+          tempData.add(row.map((Data? cell) => cell?.value.toString() ?? "").toList());
         }
       }
 
@@ -75,16 +73,13 @@ class ExcelPreviewScreenState extends State<ExcelPreviewScreen> {
                   child: DataTable(
                     columnSpacing: 20.0, // Adjust spacing for better visibility
                     border: TableBorder.all(),
-                    columns: excelData.first
-                        .map((String header) => DataColumn(label: Text(header)))
-                        .toList(),
+                    columns: excelData.first.map((String header) => DataColumn(label: Text(header))).toList(),
                     rows: excelData.skip(1).map((List<String> row) {
                       return DataRow(
                         cells: row
                             .map((String cell) => DataCell(SizedBox(
                                   width: 100, // Adjust cell width as needed
-                                  child: Text(cell,
-                                      overflow: TextOverflow.ellipsis),
+                                  child: Text(cell, overflow: TextOverflow.ellipsis),
                                 )))
                             .toList(),
                       );
