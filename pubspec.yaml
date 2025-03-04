@@ -1,6 +1,6 @@
 name: universal_file_viewer
 description: "A Flutter package to preview images, videos, PDFs, Word, Excel, CSV, PPT, and more."
-version: 0.0.9
+version: 0.0.10
 homepage: https://github.com/Shonu72/
 repository: https://github.com/Shonu72/universal_file_viewer
 
@@ -31,6 +31,11 @@ dependencies:
   webview_flutter: ^4.10.0
   webview_flutter_web: ^0.2.3+4
   docx_file_viewer: ^0.0.7
+  ### in the near future use in case the docX owner do not merge I'll create the lib for the mean time I put the code in the word file preview
+  ###     #git:
+  #    #  url: https://github.com/oscarshaitan/docx_viewer
+  #    #  ref: 6356e9133f41cc56205d8da0e02c3ebb94440f25
+
 
 dev_dependencies:
   flutter_test:

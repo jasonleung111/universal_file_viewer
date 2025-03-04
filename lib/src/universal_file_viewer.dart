@@ -7,7 +7,7 @@ import 'package:pdfrx/pdfrx.dart';
 import 'package:universal_file_viewer/src/csv_file_preview.dart';
 import 'package:universal_file_viewer/src/excel_file_preview.dart';
 import 'package:universal_file_viewer/src/txt_file_preview.dart';
-import 'package:universal_file_viewer/src/word_file_preview4.dart';
+import 'package:universal_file_viewer/src/word_file_preview.dart';
 import 'package:universal_file_viewer/universal_file_viewer.dart';
 
 import 'md_file_preview.dart';
@@ -36,7 +36,7 @@ class UniversalFileViewer extends StatelessWidget {
         case FileType.pdf:
           return PdfViewer.file(file.path);
         case FileType.word:
-          return DocxToHtml2(file: file);
+          return DocxToFlutter(file: file);
         case FileType.excel:
           return ExcelPreviewScreen(file: file);
         case FileType.csv:
