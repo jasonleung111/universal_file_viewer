@@ -32,9 +32,9 @@ FileType? detectFileType(String path) {
     return FileType.csv;
   }
   /*else if (<String>['.ppt', '.pptx'].contains(extension)) {
-    return FileType.ppt;
-  }*/
-  else if (<String>['.txt'].contains(extension)) {
+    return FileType.ppt;*/
+
+  } else if (<String>['.txt'].contains(extension)) {
     return FileType.text;
   } else if (<String>['.md'].contains(extension)) {
     return FileType.md;

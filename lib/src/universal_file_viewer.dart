@@ -27,7 +27,6 @@ class UniversalFileViewer extends StatelessWidget {
   Widget build(BuildContext context) {
     if (supportedFile(file.path)) {
       final fileType = detectFileType(file.path)!;
-
       switch (fileType) {
         case FileType.image:
           return Center(child: Image.file(file));
@@ -50,6 +49,7 @@ class UniversalFileViewer extends StatelessWidget {
       return const Center(
         child: Text('File type noty supported'),
       );
+
     }
   }
 }
