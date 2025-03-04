@@ -9,7 +9,7 @@ Features
 ✅ Excel files (.xlsx)
 ✅ CSV file preview
 ✅ PowerPoint files (.ppt, .pptx) - Upcoming
-✅ Text files (.txt, .md) - Upcoming
+✅ Text files (.txt, .md)
 ✅ Fallback to external app if unsupported
 ```
 

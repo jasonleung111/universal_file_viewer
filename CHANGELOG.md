@@ -1,6 +1,7 @@
-## 0.0.8
+## 0.0.9
 
 - Added the example to preview the files
 - Word file supports (.docx)
 - Excel file supports (.xlsx)
 - CSV file supports (.csv)
+- text file support (.txt)
