@@ -67,7 +67,7 @@ class DocxToFlutterState extends State<DocxToFlutter> {
                   },
                   child: Scrollbar(
                     child: ListView.builder(
-                      padding: const EdgeInsets.only(bottom: 48),
+                      padding: const EdgeInsets.only(bottom: 68),
                       itemCount: snapshot.requireData.length,
                       physics: _isZooming ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
                       itemBuilder: (_, int index) => snapshot.requireData[index],

@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:excel/excel.dart';
+import 'package:excel/excel.dart' as exc;
 import 'package:flutter/material.dart';
 
 /// A widget that displays the contents of an Excel file specified by the file path.
@@ -20,6 +20,8 @@ class ExcelPreviewScreen extends StatefulWidget {
 
 // ignore: public_member_api_docs
 class ExcelPreviewScreenState extends State<ExcelPreviewScreen> {
+  final ScrollController _verticalController = ScrollController();
+
   /// The data read from the Excel file.
   List<List<String>> excelData = <List<String>>[];
 
@@ -27,6 +29,12 @@ class ExcelPreviewScreenState extends State<ExcelPreviewScreen> {
   void initState() {
     super.initState();
     readExcelFile(widget.file);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _verticalController.dispose();
   }
 
   @override
@@ -41,12 +49,12 @@ class ExcelPreviewScreenState extends State<ExcelPreviewScreen> {
   Future<void> readExcelFile(File file) async {
     try {
       Uint8List fileBytes = await file.readAsBytes();
-      Excel excel = Excel.decodeBytes(fileBytes);
+      exc.Excel excel = exc.Excel.decodeBytes(fileBytes);
       List<List<String>> tempData = <List<String>>[];
 
       for (String table in excel.tables.keys) {
-        for (List<Data?> row in excel.tables[table]!.rows) {
-          tempData.add(row.map((Data? cell) => cell?.value.toString() ?? "").toList());
+        for (List<exc.Data?> row in excel.tables[table]!.rows) {
+          tempData.add(row.map((exc.Data? cell) => cell?.value.toString() ?? "").toList());
         }
       }
 
@@ -61,34 +69,71 @@ class ExcelPreviewScreenState extends State<ExcelPreviewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: excelData.isNotEmpty
-          ? SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxHeight: MediaQuery.of(context).size.height * 0.8,
-                  ),
-                  child: DataTable(
-                    columnSpacing: 20.0, // Adjust spacing for better visibility
-                    border: TableBorder.all(),
-                    columns: excelData.first.map((String header) => DataColumn(label: Text(header))).toList(),
-                    rows: excelData.skip(1).map((List<String> row) {
-                      return DataRow(
-                        cells: row
-                            .map((String cell) => DataCell(SizedBox(
-                                  width: 100, // Adjust cell width as needed
-                                  child: Text(cell, overflow: TextOverflow.ellipsis),
-                                )))
-                            .toList(),
-                      );
-                    }).toList(),
-                  ),
-                ),
-              ),
-            )
-          : const Center(child: Text("Only XLSX files are supported")),
+      backgroundColor: Colors.white,
+      body: Scrollbar(
+        controller: _verticalController,
+        thumbVisibility: true,
+        child: SingleChildScrollView(
+          controller: _verticalController,
+          padding: const EdgeInsets.only(bottom: 68),
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 280),
+            child: excelData.isNotEmpty
+                ? Theme(
+                    data: Theme.of(context).copyWith(cardTheme: const CardTheme(elevation: 0)),
+                    child: PaginatedDataTable(
+                      columns: <DataColumn>[
+                        const DataColumn(label: Text("  ")),
+                        ...excelData.first.map(
+                          (String header) => DataColumn(
+                            label: Text(header == 'null' ? '' : header, style: const TextStyle(fontWeight: FontWeight.bold)),
+                          ),
+                        ),
+                      ],
+                      source: _ExcelDataSource(excelData.sublist(1)),
+                      rowsPerPage: 100,
+                      showFirstLastButtons: true,
+                      showEmptyRows: true,
+                      dataRowMinHeight: 0,
+                      dataRowMaxHeight: 40,
+                      headingRowHeight: 40,
+                      columnSpacing: 16,
+                    ),
+                  )
+                : const Center(child: Text("Only XLSX files are supported")),
+          ),
+        ),
+      ),
     );
   }
+}
+
+class _ExcelDataSource extends DataTableSource {
+  final List<List<String>> data;
+
+  _ExcelDataSource(this.data);
+
+  @override
+  DataRow getRow(int index) {
+    if (index >= data.length) return const DataRow(cells: <DataCell>[]);
+
+    return DataRow(
+      cells: <DataCell>[
+        _buildDataCell((index + 1).toString(), isHeader: true),
+        ...data[index].map((String cell) => _buildDataCell(cell)),
+      ],
+    );
+  }
+
+  DataCell _buildDataCell(String text, {bool isHeader = false}) =>
+      DataCell(Text(text == 'null' ? '' : text, style: TextStyle(fontWeight: isHeader ? FontWeight.w300 : FontWeight.normal)));
+
+  @override
+  bool get isRowCountApproximate => false;
+
+  @override
+  int get rowCount => data.length;
+
+  @override
+  int get selectedRowCount => 0;
 }
