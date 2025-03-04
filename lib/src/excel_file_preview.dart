@@ -50,7 +50,11 @@ class ExcelPreviewScreenState extends State<ExcelPreviewScreen> {
   Future<List<List<String>>> readExcelFile(File file) async {
     try {
       Uint8List fileBytes = await file.readAsBytes(); // ✅ Read file bytes in the main thread
-      return await compute(parseExcelData, fileBytes); // ✅ Process in the background
+      if (kIsWeb) {
+        return parseExcelData(fileBytes); // ✅ Runs synchronously on Web
+      } else {
+        return await compute(parseExcelData, fileBytes); // ✅ Uses compute() on Android & iOS
+      }
     } catch (e) {
       debugPrint("Error reading Excel file: $e");
       rethrow;
