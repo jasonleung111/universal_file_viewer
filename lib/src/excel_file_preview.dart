@@ -1,8 +1,9 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:excel/excel.dart' as exc;
+import 'package:flutter/foundation.dart'; // Import compute()
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
 /// A widget that displays the contents of an Excel file specified by the file path.
 ///
@@ -23,12 +24,12 @@ class ExcelPreviewScreenState extends State<ExcelPreviewScreen> {
   final ScrollController _verticalController = ScrollController();
 
   /// The data read from the Excel file.
-  List<List<String>> excelData = <List<String>>[];
+  late final Future<List<List<String>>> _excelData;
 
   @override
   void initState() {
     super.initState();
-    readExcelFile(widget.file);
+    _excelData = readExcelFile(widget.file);
   }
 
   @override
@@ -41,28 +42,18 @@ class ExcelPreviewScreenState extends State<ExcelPreviewScreen> {
   void didUpdateWidget(covariant ExcelPreviewScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.file != widget.file) {
-      readExcelFile(widget.file);
+      _excelData = readExcelFile(widget.file);
     }
   }
 
-  /// Reads the Excel file at [file] and updates [excelData] with the data from the file.
-  Future<void> readExcelFile(File file) async {
+  /// Reads the Excel file and processes it in the background using `compute()`.
+  Future<List<List<String>>> readExcelFile(File file) async {
     try {
-      Uint8List fileBytes = await file.readAsBytes();
-      exc.Excel excel = exc.Excel.decodeBytes(fileBytes);
-      List<List<String>> tempData = <List<String>>[];
-
-      for (String table in excel.tables.keys) {
-        for (List<exc.Data?> row in excel.tables[table]!.rows) {
-          tempData.add(row.map((exc.Data? cell) => cell?.value.toString() ?? "").toList());
-        }
-      }
-
-      setState(() {
-        excelData = tempData;
-      });
+      Uint8List fileBytes = await file.readAsBytes(); // ✅ Read file bytes in the main thread
+      return await compute(parseExcelData, fileBytes); // ✅ Process in the background
     } catch (e) {
       debugPrint("Error reading Excel file: $e");
+      rethrow;
     }
   }
 
@@ -76,31 +67,57 @@ class ExcelPreviewScreenState extends State<ExcelPreviewScreen> {
         child: SingleChildScrollView(
           controller: _verticalController,
           padding: const EdgeInsets.only(bottom: 68),
-          child: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 280),
-            child: excelData.isNotEmpty
-                ? Theme(
-                    data: Theme.of(context).copyWith(cardTheme: const CardTheme(elevation: 0)),
-                    child: PaginatedDataTable(
-                      columns: <DataColumn>[
-                        const DataColumn(label: Text("  ")),
-                        ...excelData.first.map(
-                          (String header) => DataColumn(
-                            label: Text(header == 'null' ? '' : header, style: const TextStyle(fontWeight: FontWeight.bold)),
-                          ),
+          child: FutureBuilder<List<List<String>>>(
+            future: _excelData,
+            builder: (BuildContext context, AsyncSnapshot<List<List<String>>> snapshot) {
+              return AnimatedSwitcher(
+                duration: const Duration(milliseconds: 280),
+                child: snapshot.hasData
+                    ? Theme(
+                        data: Theme.of(context).copyWith(cardTheme: const CardTheme(elevation: 0)),
+                        child: PaginatedDataTable(
+                          columns: <DataColumn>[
+                            const DataColumn(label: Text("  ")),
+                            ...snapshot.requireData.first.map(
+                              (String header) => DataColumn(
+                                label: Text(header == 'null' ? '' : header, style: const TextStyle(fontWeight: FontWeight.bold)),
+                              ),
+                            ),
+                          ],
+                          source: _ExcelDataSource(snapshot.requireData.sublist(1)),
+                          rowsPerPage: 100,
+                          showFirstLastButtons: true,
+                          showEmptyRows: true,
+                          dataRowMinHeight: 0,
+                          dataRowMaxHeight: 40,
+                          headingRowHeight: 40,
+                          columnSpacing: 16,
                         ),
-                      ],
-                      source: _ExcelDataSource(excelData.sublist(1)),
-                      rowsPerPage: 100,
-                      showFirstLastButtons: true,
-                      showEmptyRows: true,
-                      dataRowMinHeight: 0,
-                      dataRowMaxHeight: 40,
-                      headingRowHeight: 40,
-                      columnSpacing: 16,
-                    ),
-                  )
-                : const Center(child: Text("Only XLSX files are supported")),
+                      )
+                    : GridView.builder(
+                        shrinkWrap: true,
+                        itemCount: 100,
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 5,
+                          crossAxisSpacing: 2,
+                          mainAxisSpacing: 2,
+                          childAspectRatio: 2,
+                        ),
+                        padding: const EdgeInsets.all(16),
+                        itemBuilder: (_, __) {
+                          return Shimmer.fromColors(
+                            baseColor: Colors.grey[300]!,
+                            highlightColor: Colors.grey[100]!,
+                            child: Container(
+                              width: double.infinity,
+                              height: double.infinity,
+                              decoration: const BoxDecoration(color: Colors.white),
+                            ),
+                          );
+                        },
+                      ),
+              );
+            },
           ),
         ),
       ),
@@ -136,4 +153,20 @@ class _ExcelDataSource extends DataTableSource {
 
   @override
   int get selectedRowCount => 0;
+}
+
+/// ✅ Background isolate function to parse Excel data
+List<List<String>> parseExcelData(Uint8List fileBytes) {
+  final exc.Excel excel = exc.Excel.decodeBytes(fileBytes);
+  final List<List<String>> extractedData = <List<String>>[];
+
+  for (String table in excel.tables.keys) {
+    for (List<exc.Data?> row in excel.tables[table]!.rows) {
+      extractedData.add(
+        row.map((exc.Data? cell) => cell?.value?.toString() ?? "").toList(), // ✅ Extract only Strings
+      );
+    }
+  }
+
+  return extractedData;
 }

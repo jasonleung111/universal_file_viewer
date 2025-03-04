@@ -30,6 +30,7 @@ dependencies:
   markdown: ^7.3.0
   webview_flutter: ^4.10.0
   webview_flutter_web: ^0.2.3+4
+  shimmer: ^3.0.0
   docx_file_viewer: ^0.0.7
   ### in the near future use in case the docX owner do not merge I'll create the lib for the mean time I put the code in the word file preview
   ###     #git:
