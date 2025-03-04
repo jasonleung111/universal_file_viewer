@@ -2,7 +2,7 @@
 
 import 'package:path/path.dart' as p;
 
-enum FileType { image, video, pdf, word, excel, csv, ppt, text, unknown }
+enum FileType { image, video, pdf, word, excel, csv, ppt, text, md, unknown }
 
 /// Detect the file type of the given file path.
 ///
@@ -35,8 +35,10 @@ FileType detectFileType(String path) {
     return FileType.csv;
   } else if (<String>['.ppt', '.pptx'].contains(extension)) {
     return FileType.ppt;
-  } else if (<String>['.txt', '.md'].contains(extension)) {
+  } else if (<String>['.txt'].contains(extension)) {
     return FileType.text;
+  } else if (<String>['.md'].contains(extension)) {
+    return FileType.md;
   } else {
     return FileType.unknown;
   }

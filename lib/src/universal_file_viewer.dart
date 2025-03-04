@@ -7,6 +7,7 @@ import 'package:open_file/open_file.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:universal_file_viewer/src/csv_file_preview.dart';
 import 'package:universal_file_viewer/src/excel_file_preview.dart';
+import 'package:universal_file_viewer/src/text_file_preview.dart';
 import 'package:universal_file_viewer/src/word_file_preview.dart';
 import 'package:universal_file_viewer/universal_file_viewer.dart';
 
@@ -39,8 +40,8 @@ class UniversalFileViewer extends StatelessWidget {
         return ExcelPreviewScreen(filePath: filePath);
       case FileType.csv:
         return CsvPreviewScreen(filePath: filePath);
-      // case FileType.ppt:
-      //   return OfficeFileViewer(filePath: filePath);
+      case FileType.text:
+        return TextPreviewScreen(filePath: filePath);
       default:
         return Center(
           child: ElevatedButton(
