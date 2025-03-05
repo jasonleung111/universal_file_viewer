@@ -41,15 +41,14 @@ class UniversalFileViewer extends StatelessWidget {
         case FileType.csv:
           return CsvPreviewScreen(file: file);
         case FileType.text:
-          throw TxtPreviewScreen(file: file);
+          return TxtPreviewScreen(file: file);
         case FileType.md:
-          throw MdPreviewScreen(file: file);
+          return MdPreviewScreen(file: file);
       }
     } else {
       return const Center(
-        child: Text('File type noty supported'),
+        child: Text('File type not supported'),
       );
-
     }
   }
 }

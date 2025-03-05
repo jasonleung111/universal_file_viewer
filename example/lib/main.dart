@@ -46,6 +46,7 @@ class FileViewerScreenState extends State<FileViewerScreen> {
           ElevatedButton(onPressed: _pickFile, child: const Text('Pick a File')),
           const SizedBox(height: 20),
           Expanded(
+            key: ValueKey(_filePath),
             child:
                 _filePath == null
                     ? const Center(child: Text('No file selected'))

@@ -658,10 +658,7 @@ class DocxExtractor {
     final int after = int.tryParse(pPr?.getElement('w:spacing')?.getAttribute('w:after') ?? "0") ?? 0;
 
     // Convert Word spacing units to Flutter padding (assume 20 units = 1 point)
-    return EdgeInsets.only(
-      top: before / 20,
-      bottom: after / 20,
-    );
+    return EdgeInsets.only(top: before / 20, bottom: after / 20);
   }
 
   TextStyle? _parseHeadingStyle(XmlElement paragraph) {

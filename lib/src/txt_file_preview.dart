@@ -17,12 +17,12 @@ class TxtPreviewScreen extends StatefulWidget {
 // ignore: public_member_api_docs
 class TxtPreviewScreenState extends State<TxtPreviewScreen> {
   /// The data read from the TXT file.
-  late String txtData;
+  late final Future<String> txtData;
 
   @override
   void initState() {
     super.initState();
-    readTxtFile(widget.file);
+    txtData = readTxtFile(widget.file);
   }
 
   @override
@@ -34,11 +34,12 @@ class TxtPreviewScreenState extends State<TxtPreviewScreen> {
   }
 
   /// Reads the TXT file at [file] and updates [txtData] with the data.
-  Future<void> readTxtFile(File file) async {
+  Future<String> readTxtFile(File file) async {
     try {
-      txtData = await file.readAsString();
+      return await file.readAsString();
     } catch (e) {
       debugPrint("Error reading TXT file: $e");
+      rethrow;
     }
   }
 
@@ -55,6 +56,13 @@ class TxtPreviewScreenState extends State<TxtPreviewScreen> {
   /// displayed instead.
 
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: Text(txtData.isNotEmpty ? txtData : "No TXT Data Loaded")));
+    return FutureBuilder<String>(
+        future: txtData,
+        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+          return Scaffold(
+              body: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 280),
+                  child: Text(snapshot.hasData ? snapshot.requireData : "No TXT Data Loaded")));
+        });
   }
 }
