@@ -27,13 +27,6 @@ class MdPreviewScreenState extends State<MdPreviewScreen> {
   late final WebViewController _controller = WebViewController();
 
   @override
-  void initState() {
-    super.initState();
-    readMdFile(widget.file);
-    _controller.loadRequest(Uri.dataFromString(rawHtml, mimeType: 'text/html', encoding: Encoding.getByName('utf-8')));
-  }
-
-  @override
   void didUpdateWidget(covariant MdPreviewScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.file != widget.file) {
@@ -41,11 +34,27 @@ class MdPreviewScreenState extends State<MdPreviewScreen> {
     }
   }
 
-  /// Reads the MD file at [file] and updates [mdData] with the data.
+  @override
+  void initState() {
+    super.initState();
+    _controller.setJavaScriptMode(JavaScriptMode.unrestricted);
+    readMdFile(widget.file);
+  }
+
+  /// Reads the MD file at [file] and updates [mdData] and [rawHtml] with the data.
+  ///
+  /// If the file is successfully read, [mdData] is set to the contents of the file
+  /// and [rawHtml] is set to the equivalent HTML. The [WebView] is then loaded with
+  /// this HTML. If there is an error reading the file, a debug message is printed.
   Future<void> readMdFile(File file) async {
     try {
-      mdData = await file.readAsString();
-      rawHtml = markdown.markdownToHtml(mdData);
+      String mdContent = await file.readAsString();
+      setState(() {
+        mdData = mdContent;
+        rawHtml = markdown.markdownToHtml(mdData);
+        _controller.loadRequest(Uri.dataFromString(rawHtml,
+            mimeType: 'text/html', encoding: Encoding.getByName('utf-8')));
+      });
     } catch (e) {
       debugPrint("Error reading MD file: $e");
     }
@@ -65,6 +74,9 @@ class MdPreviewScreenState extends State<MdPreviewScreen> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(child: rawHtml.isNotEmpty ? WebViewWidget(controller: _controller) : const Text("No MD Data Loaded")));
+        body: Center(
+            child: rawHtml.isNotEmpty
+                ? WebViewWidget(controller: _controller)
+                : const Text("No MD Data Loaded")));
   }
 }

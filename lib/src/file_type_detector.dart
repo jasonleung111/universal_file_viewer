@@ -18,7 +18,8 @@ enum FileType { image, video, pdf, word, excel, csv, text, md }
 FileType? detectFileType(String path) {
   final String extension = p.extension(path).toLowerCase();
 
-  if (<String>['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff'].contains(extension)) {
+  if (<String>['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff']
+      .contains(extension)) {
     return FileType.image;
   } else if (<String>['.mp4', '.avi', '.mov', '.mkv'].contains(extension)) {
     return FileType.video;

@@ -8,8 +8,8 @@ Features
 ✅ Word documents (.doc, .docx)
 ✅ Excel files (.xlsx)
 ✅ CSV file preview
+✅ Text files (.txt, .md)
 ✅ PowerPoint files (.ppt, .pptx) - Upcoming
-✅ Text files (.txt, .md) - Upcoming
 ✅ Fallback to external app if unsupported
 ```
 
