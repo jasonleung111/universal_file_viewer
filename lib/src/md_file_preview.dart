@@ -41,6 +41,11 @@ class MdPreviewScreenState extends State<MdPreviewScreen> {
     readMdFile(widget.file);
   }
 
+  /// Reads the MD file at [file] and updates [mdData] and [rawHtml] with the data.
+  ///
+  /// If the file is successfully read, [mdData] is set to the contents of the file
+  /// and [rawHtml] is set to the equivalent HTML. The [WebView] is then loaded with
+  /// this HTML. If there is an error reading the file, a debug message is printed.
   Future<void> readMdFile(File file) async {
     try {
       String mdContent = await file.readAsString();

@@ -49,11 +49,13 @@ class ExcelPreviewScreenState extends State<ExcelPreviewScreen> {
   /// Reads the Excel file and processes it in the background using `compute()`.
   Future<List<List<String>>> readExcelFile(File file) async {
     try {
-      Uint8List fileBytes = await file.readAsBytes(); // ✅ Read file bytes in the main thread
+      Uint8List fileBytes =
+          await file.readAsBytes(); // ✅ Read file bytes in the main thread
       if (kIsWeb) {
         return parseExcelData(fileBytes); // ✅ Runs synchronously on Web
       } else {
-        return await compute(parseExcelData, fileBytes); // ✅ Uses compute() on Android & iOS
+        return await compute(
+            parseExcelData, fileBytes); // ✅ Uses compute() on Android & iOS
       }
     } catch (e) {
       debugPrint("Error reading Excel file: $e");
@@ -73,22 +75,27 @@ class ExcelPreviewScreenState extends State<ExcelPreviewScreen> {
           padding: const EdgeInsets.only(bottom: 68),
           child: FutureBuilder<List<List<String>>>(
             future: _excelData,
-            builder: (BuildContext context, AsyncSnapshot<List<List<String>>> snapshot) {
+            builder: (BuildContext context,
+                AsyncSnapshot<List<List<String>>> snapshot) {
               return AnimatedSwitcher(
                 duration: const Duration(milliseconds: 280),
                 child: snapshot.hasData
                     ? Theme(
-                        data: Theme.of(context).copyWith(cardTheme: const CardTheme(elevation: 0)),
+                        data: Theme.of(context)
+                            .copyWith(cardTheme: const CardTheme(elevation: 0)),
                         child: PaginatedDataTable(
                           columns: <DataColumn>[
                             const DataColumn(label: Text("  ")),
                             ...snapshot.requireData.first.map(
                               (String header) => DataColumn(
-                                label: Text(header == 'null' ? '' : header, style: const TextStyle(fontWeight: FontWeight.bold)),
+                                label: Text(header == 'null' ? '' : header,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold)),
                               ),
                             ),
                           ],
-                          source: _ExcelDataSource(snapshot.requireData.sublist(1)),
+                          source:
+                              _ExcelDataSource(snapshot.requireData.sublist(1)),
                           rowsPerPage: 100,
                           showFirstLastButtons: true,
                           showEmptyRows: true,
@@ -101,7 +108,8 @@ class ExcelPreviewScreenState extends State<ExcelPreviewScreen> {
                     : GridView.builder(
                         shrinkWrap: true,
                         itemCount: 100,
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 5,
                           crossAxisSpacing: 2,
                           mainAxisSpacing: 2,
@@ -115,7 +123,8 @@ class ExcelPreviewScreenState extends State<ExcelPreviewScreen> {
                             child: Container(
                               width: double.infinity,
                               height: double.infinity,
-                              decoration: const BoxDecoration(color: Colors.white),
+                              decoration:
+                                  const BoxDecoration(color: Colors.white),
                             ),
                           );
                         },
@@ -147,7 +156,9 @@ class _ExcelDataSource extends DataTableSource {
   }
 
   DataCell _buildDataCell(String text, {bool isHeader = false}) =>
-      DataCell(Text(text == 'null' ? '' : text, style: TextStyle(fontWeight: isHeader ? FontWeight.w300 : FontWeight.normal)));
+      DataCell(Text(text == 'null' ? '' : text,
+          style: TextStyle(
+              fontWeight: isHeader ? FontWeight.w300 : FontWeight.normal)));
 
   @override
   bool get isRowCountApproximate => false;
@@ -167,7 +178,9 @@ List<List<String>> parseExcelData(Uint8List fileBytes) {
   for (String table in excel.tables.keys) {
     for (List<exc.Data?> row in excel.tables[table]!.rows) {
       extractedData.add(
-        row.map((exc.Data? cell) => cell?.value?.toString() ?? "").toList(), // ✅ Extract only Strings
+        row
+            .map((exc.Data? cell) => cell?.value?.toString() ?? "")
+            .toList(), // ✅ Extract only Strings
       );
     }
   }

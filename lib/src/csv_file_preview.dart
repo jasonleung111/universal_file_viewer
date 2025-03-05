@@ -38,7 +38,8 @@ class CsvPreviewScreenState extends State<CsvPreviewScreen> {
   Future<void> readCsvFile(File file) async {
     try {
       String csvString = await file.readAsString();
-      List<List<dynamic>> tempData = const CsvToListConverter().convert(csvString);
+      List<List<dynamic>> tempData =
+          const CsvToListConverter().convert(csvString);
 
       setState(() {
         csvData = tempData
@@ -83,7 +84,8 @@ class CsvPreviewScreenState extends State<CsvPreviewScreen> {
                             children: csvData[index]
                                 .map((String cell) => SizedBox(
                                       width: MediaQuery.of(context).size.width,
-                                      child: Text(cell, overflow: TextOverflow.ellipsis),
+                                      child: Text(cell,
+                                          overflow: TextOverflow.ellipsis),
                                     ))
                                 .toList(),
                           ),
