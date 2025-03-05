@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:universal_file_viewer/universal_file_viewer.dart';
@@ -41,16 +43,14 @@ class FileViewerScreenState extends State<FileViewerScreen> {
       appBar: AppBar(title: const Text('Universal File Viewer Test')),
       body: Column(
         children: [
-          ElevatedButton(
-            onPressed: _pickFile,
-            child: const Text('Pick a File'),
-          ),
+          ElevatedButton(onPressed: _pickFile, child: const Text('Pick a File')),
           const SizedBox(height: 20),
           Expanded(
+            key: ValueKey(_filePath),
             child:
                 _filePath == null
                     ? const Center(child: Text('No file selected'))
-                    : UniversalFileViewer(filePath: _filePath!),
+                    : UniversalFileViewer(file: File.fromUri(Uri.parse(_filePath!))),
           ),
         ],
       ),

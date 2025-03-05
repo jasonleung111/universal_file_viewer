@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 
 /// A widget that displays the contents of a CSV file specified by the file path.
 class CsvPreviewScreen extends StatefulWidget {
-  /// The path to the CSV file to display.
-  final String filePath;
+  /// The CSV file to display.
+  final File file;
 
   /// Creates a [CsvPreviewScreen] widget.
-  const CsvPreviewScreen({super.key, required this.filePath});
+  const CsvPreviewScreen({super.key, required this.file});
 
   @override
   CsvPreviewScreenState createState() => CsvPreviewScreenState();
@@ -23,24 +23,22 @@ class CsvPreviewScreenState extends State<CsvPreviewScreen> {
   @override
   void initState() {
     super.initState();
-    readCsvFile(widget.filePath);
+    readCsvFile(widget.file);
   }
 
   @override
   void didUpdateWidget(covariant CsvPreviewScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.filePath != widget.filePath) {
-      readCsvFile(widget.filePath);
+    if (oldWidget.file != widget.file) {
+      readCsvFile(widget.file);
     }
   }
 
   /// Reads the CSV file at [filePath] and updates [csvData] with the data.
-  Future<void> readCsvFile(String filePath) async {
+  Future<void> readCsvFile(File file) async {
     try {
-      File file = File(filePath);
       String csvString = await file.readAsString();
-      List<List<dynamic>> tempData =
-          const CsvToListConverter().convert(csvString);
+      List<List<dynamic>> tempData = const CsvToListConverter().convert(csvString);
 
       setState(() {
         csvData = tempData
@@ -85,8 +83,7 @@ class CsvPreviewScreenState extends State<CsvPreviewScreen> {
                             children: csvData[index]
                                 .map((String cell) => SizedBox(
                                       width: MediaQuery.of(context).size.width,
-                                      child: Text(cell,
-                                          overflow: TextOverflow.ellipsis),
+                                      child: Text(cell, overflow: TextOverflow.ellipsis),
                                     ))
                                 .toList(),
                           ),
