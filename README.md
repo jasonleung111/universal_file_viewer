@@ -28,8 +28,9 @@ UniversalFileViewer(filePath: '/sample.pdf'),
 ```
 ```
 Example Video
-https://github.com/user-attachments/assets/b141e922-d45c-4f39-a4e5-985f0c530093
 ```
+https://github.com/user-attachments/assets/b141e922-d45c-4f39-a4e5-985f0c530093
+
 ## Future Enhancements<br />
 ✅ More file format support<br />
 ✅ Web support<br />
