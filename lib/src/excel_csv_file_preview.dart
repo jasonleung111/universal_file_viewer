@@ -8,20 +8,20 @@ import 'package:universal_file_viewer/universal_file_viewer.dart';
 
 /// A widget that displays the contents of an Excel file specified by the file path.
 ///
-/// The widget reads the Excel file and displays its contents in a table.
-class ExcelPreviewScreen extends StatefulWidget {
+/// The widget reads the Excel / CSV file and displays its contents in a table.
+class ExcelCSVPreviewScreen extends StatefulWidget {
   /// The Excel file to display.
   final File file;
 
-  /// Creates a [ExcelPreviewScreen] widget.
-  const ExcelPreviewScreen({super.key, required this.file});
+  /// Creates a [ExcelCSVPreviewScreen] widget.
+  const ExcelCSVPreviewScreen({super.key, required this.file});
 
   @override
-  ExcelPreviewScreenState createState() => ExcelPreviewScreenState();
+  ExcelCSVPreviewScreenState createState() => ExcelCSVPreviewScreenState();
 }
 
 // ignore: public_member_api_docs
-class ExcelPreviewScreenState extends State<ExcelPreviewScreen> {
+class ExcelCSVPreviewScreenState extends State<ExcelCSVPreviewScreen> {
   final ScrollController _verticalController = ScrollController();
 
   /// The data read from the Excel file.
@@ -40,7 +40,7 @@ class ExcelPreviewScreenState extends State<ExcelPreviewScreen> {
   }
 
   @override
-  void didUpdateWidget(covariant ExcelPreviewScreen oldWidget) {
+  void didUpdateWidget(covariant ExcelCSVPreviewScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.file != widget.file) {
       _excelData = readExcelFile(widget.file);
