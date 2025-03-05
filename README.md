@@ -29,7 +29,10 @@ UniversalFileViewer(filePath: '/sample.pdf'),
 ```
 Example Video
 ```
-https://github.com/user-attachments/assets/b141e922-d45c-4f39-a4e5-985f0c530093
+<div align="center">
+  <video src="https://github.com/user-attachments/assets/b141e922-d45c-4f39-a4e5-985f0c530093" width="400" />
+  </div>
+
 
 ## Future Enhancements<br />
 ✅ More file format support<br />
