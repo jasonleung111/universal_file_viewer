@@ -4,6 +4,7 @@ import 'package:excel/excel.dart' as exc;
 import 'package:flutter/foundation.dart'; // Import compute()
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:universal_file_viewer/universal_file_viewer.dart';
 
 /// A widget that displays the contents of an Excel file specified by the file path.
 ///
@@ -49,14 +50,23 @@ class ExcelPreviewScreenState extends State<ExcelPreviewScreen> {
   /// Reads the Excel file and processes it in the background using `compute()`.
   Future<List<List<String>>> readExcelFile(File file) async {
     try {
-      Uint8List fileBytes = await file.readAsBytes(); // ✅ Read file bytes in the main thread
       if (kIsWeb) {
-        return parseExcelData(fileBytes); // ✅ Runs synchronously on Web
+        Uint8List fileBytes = await file.readAsBytes(); //Read file bytes in the main thread
+        return _parseExcelData(fileBytes); //Runs synchronously on Web
       } else {
-        return await compute(parseExcelData, fileBytes); // ✅ Uses compute() on Android & iOS
+        final FileType fileType = detectFileType(file.path)!;
+        if (fileType == FileType.excel) {
+          Uint8List fileBytes = await file.readAsBytes(); //Read file bytes in the main thread
+
+          return await compute(_parseExcelData, fileBytes);
+        } else {
+          String csvString = await file.readAsString(); //Read file as String in the main thread
+
+          return await compute(_parseCSVString, csvString);
+        }
       }
     } catch (e) {
-      debugPrint("Error reading Excel file: $e");
+      debugPrint("Error reading Excel / CSV file: $e");
       rethrow;
     }
   }
@@ -160,7 +170,7 @@ class _ExcelDataSource extends DataTableSource {
 }
 
 /// ✅ Background isolate function to parse Excel data
-List<List<String>> parseExcelData(Uint8List fileBytes) {
+List<List<String>> _parseExcelData(Uint8List fileBytes) {
   final exc.Excel excel = exc.Excel.decodeBytes(fileBytes);
   final List<List<String>> extractedData = <List<String>>[];
 
@@ -173,4 +183,72 @@ List<List<String>> parseExcelData(Uint8List fileBytes) {
   }
 
   return extractedData;
+}
+
+/// ✅ Background isolate function to parse CSV data
+List<List<String>> _parseCSVString(String content) {
+  List<List<String>> csvData = <List<String>>[];
+
+  // Detect line and column delimiters
+  String lineDelimiter = _detectLineDelimiter(content);
+  String columnDelimiter = _detectDelimiter(content);
+
+  List<String> rows = content.split(lineDelimiter);
+
+  for (String row in rows) {
+    if (row.trim().isEmpty) continue; // Skip empty lines
+    csvData.add(_splitRow(row, columnDelimiter));
+  }
+
+  return csvData;
+}
+
+String _detectLineDelimiter(String content) {
+  if (content.contains('\r\n')) return '\r\n'; // Windows
+  if (content.contains('\r')) return '\r'; // MacOS Classic
+  return '\n'; // Default Unix/Linux
+}
+
+String _detectDelimiter(String content) {
+  List<String> commonDelimiters = <String>[',', ';', '\t', '|'];
+  Map<String, int> delimiterCount = <String, int>{};
+
+  List<String> lines = content.split(_detectLineDelimiter(content));
+  if (lines.isEmpty) return ','; // Default fallback
+
+  String sampleLine = lines.first;
+
+  for (String delim in commonDelimiters) {
+    delimiterCount[delim] = sampleLine.split(delim).length - 1;
+  }
+
+  return delimiterCount.entries.reduce((MapEntry<String, int> a, MapEntry<String, int> b) => a.value > b.value ? a : b).key;
+}
+
+List<String> _splitRow(String row, String delimiter) {
+  List<String> fields = <String>[];
+  StringBuffer currentField = StringBuffer();
+  bool inQuotes = false;
+
+  for (int i = 0; i < row.length; i++) {
+    String char = row[i];
+
+    if (char == '"') {
+      if (inQuotes && i + 1 < row.length && row[i + 1] == '"') {
+        currentField.write('"'); // Handle escaped double quotes ""
+        i++; // Skip next quote
+      } else {
+        inQuotes = !inQuotes; // Toggle quote mode
+      }
+    } else if (char == delimiter && !inQuotes) {
+      fields.add(currentField.toString().trim());
+      currentField.clear();
+    } else {
+      currentField.write(char);
+    }
+  }
+
+  fields.add(currentField.toString().trim());
+
+  return fields;
 }
