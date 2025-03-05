@@ -443,19 +443,29 @@ class DocxExtractor {
     final TextStyle? headingStyle = _parseHeadingStyle(paragraph);
     // Handle paragraph spacing
     final EdgeInsets paragraphSpacing = _parseParagraphSpacing(paragraph);
-    final TextAlign newtextAlignment = _getTextAlign(paragraph.getElement('w:pPr')?.getElement('w:jc'));
+    final TextAlign newTextAlignment = _getTextAlign(paragraph.getElement('w:pPr')?.getElement('w:jc'));
 
     if (headingStyle != null) {
       return Padding(
         padding: paragraphSpacing,
         child: Container(
           decoration: BoxDecoration(color: backgroundColor, border: border ?? _createBorder(borderElement)),
-          child: RichText(
-            textAlign: textAlignment ?? newtextAlignment,
-            text: TextSpan(
-              children: spans,
-              style: headingStyle.merge(mergedStye),
-            ),
+          child: Text.rich(
+            TextSpan(
+                children: spans.map(
+              (InlineSpan span) {
+                if (span is TextSpan) {
+                  return TextSpan(
+                    text: span.toPlainText(),
+                    style: span.style != null ? span.style?.merge(headingStyle) : headingStyle,
+                  );
+                } else {
+                  return span;
+                }
+              },
+            ).toList()),
+            textAlign: textAlignment ?? newTextAlignment,
+            style: headingStyle,
           ),
         ),
       );
@@ -467,9 +477,9 @@ class DocxExtractor {
       padding: paragraphSpacing,
       child: Container(
         decoration: BoxDecoration(color: backgroundColor, border: border ?? _createBorder(borderElement)),
-        child: RichText(
-          textAlign: textAlignment ?? newtextAlignment,
-          text: TextSpan(
+        child: Text.rich(
+          textAlign: textAlignment ?? newTextAlignment,
+          TextSpan(
             children: spans,
             style: mergedStye,
           ),
