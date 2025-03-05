@@ -26,6 +26,7 @@ class TxtPreviewScreenState extends State<TxtPreviewScreen> {
   }
 
   @override
+
   /// Called when the [TxtPreviewScreen] widget is updated. If the [File] being
   /// displayed has changed, this method reads the new file and updates the
   /// [txtData] future with the new data.
