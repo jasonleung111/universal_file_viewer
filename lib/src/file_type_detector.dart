@@ -2,7 +2,7 @@
 
 import 'package:path/path.dart' as p;
 
-enum FileType { image, video, pdf, word, excel, csv, ppt, text, md, unknown }
+enum FileType { image, video, pdf, word, excel, csv, text, md }
 
 /// Detect the file type of the given file path.
 ///
@@ -15,13 +15,10 @@ enum FileType { image, video, pdf, word, excel, csv, ppt, text, md, unknown }
 /// - csv: .csv
 /// - ppt: .ppt, .pptx
 /// - text: .txt, .md
-/// - unknown: any other file type
-///
-FileType detectFileType(String path) {
+FileType? detectFileType(String path) {
   final String extension = p.extension(path).toLowerCase();
 
-  if (<String>['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff']
-      .contains(extension)) {
+  if (<String>['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff'].contains(extension)) {
     return FileType.image;
   } else if (<String>['.mp4', '.avi', '.mov', '.mkv'].contains(extension)) {
     return FileType.video;
@@ -33,13 +30,17 @@ FileType detectFileType(String path) {
     return FileType.excel;
   } else if (extension == '.csv') {
     return FileType.csv;
-  } else if (<String>['.ppt', '.pptx'].contains(extension)) {
-    return FileType.ppt;
-  } else if (<String>['.txt'].contains(extension)) {
+  }
+  /*else if (<String>['.ppt', '.pptx'].contains(extension)) {
+    return FileType.ppt;*/
+
+  else if (<String>['.txt'].contains(extension)) {
     return FileType.text;
   } else if (<String>['.md'].contains(extension)) {
     return FileType.md;
   } else {
-    return FileType.unknown;
+    return null;
   }
 }
+
+bool supportedFile(String path) => detectFileType(path) != null;

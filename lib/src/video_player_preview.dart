@@ -5,13 +5,13 @@ import 'package:video_player/video_player.dart';
 
 /// A widget that displays a video from the given file path.
 class VideoPlayerWidget extends StatefulWidget {
-  /// The path to the video file to display.
-  final String filePath;
+  /// The video file to display.
+  final File file;
 
   /// Creates a [VideoPlayerWidget].
   ///
   /// The [filePath] parameter is required.
-  const VideoPlayerWidget({super.key, required this.filePath});
+  const VideoPlayerWidget({super.key, required this.file});
 
   @override
   VideoPlayerWidgetState createState() => VideoPlayerWidgetState();
@@ -32,7 +32,7 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   @override
   void didUpdateWidget(covariant VideoPlayerWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.filePath != widget.filePath) {
+    if (oldWidget.file != widget.file) {
       _initializeVideo();
     }
   }
@@ -43,7 +43,7 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     _controller?.dispose();
 
     // Create a new controller
-    _controller = VideoPlayerController.file(File(widget.filePath))
+    _controller = VideoPlayerController.file(widget.file)
       ..initialize().then((_) {
         setState(() {}); // Refresh UI after initialization
         _controller!.play(); // Auto-play new video
