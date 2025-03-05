@@ -1,6 +1,6 @@
 name: universal_file_viewer
 description: "A Flutter package to preview images, videos, PDFs, Word, Excel, CSV, PPT, and more."
-version: 0.0.10
+version: 0.0.11
 homepage: https://github.com/Shonu72/
 repository: https://github.com/Shonu72/universal_file_viewer
 
