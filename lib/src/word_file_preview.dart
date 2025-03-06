@@ -120,7 +120,7 @@ class DocxExtractor {
       // .firstOrNull;
       final ArchiveFile? stylesXmlFile = archive.files.where((ArchiveFile file) => file.name == 'word/styles.xml').firstOrNull;
       if (stylesXmlFile != null) {
-        final XmlDocument styleXml = XmlDocument.parse(String.fromCharCodes(stylesXmlFile.content));
+        final XmlDocument styleXml = XmlDocument.parse(utf8.decode(stylesXmlFile.content));
 
         _parseStyles(styleXml);
       }
@@ -129,14 +129,14 @@ class DocxExtractor {
       }
       // if (themeXmlFIle != null) {
       //   final themerel =
-      //       XmlDocument.parse(String.fromCharCodes(themeXmlFIle.content));
+      //       XmlDocument.parse(utf8.decode(themeXmlFIle.content));
       //   // log(themerel.toXmlString());
       // }
       // Parse XML
       final XmlDocument documentXml = XmlDocument.parse(utf8.decode(documentXmlFile.content));
 
       if (relsXmlFile != null) {
-        final XmlDocument relsXml = XmlDocument.parse(String.fromCharCodes(relsXmlFile.content));
+        final XmlDocument relsXml = XmlDocument.parse(utf8.decode(relsXmlFile.content));
         _extractImageRelationships(relsXml, archive);
       }
 
