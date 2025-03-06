@@ -133,7 +133,7 @@ class DocxExtractor {
       //   // log(themerel.toXmlString());
       // }
       // Parse XML
-      final XmlDocument documentXml = XmlDocument.parse(String.fromCharCodes(documentXmlFile.content));
+      final XmlDocument documentXml = XmlDocument.parse(utf8.decode(documentXmlFile.content));
 
       if (relsXmlFile != null) {
         final XmlDocument relsXml = XmlDocument.parse(String.fromCharCodes(relsXmlFile.content));
