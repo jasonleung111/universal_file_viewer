@@ -7,8 +7,11 @@ class TxtPreviewScreen extends StatefulWidget {
   /// The TXT file to display.
   final File file;
 
+  /// The padding inside the scroll for the document
+  final EdgeInsets? padding;
+
   /// Creates a [TxtPreviewScreen] widget.
-  const TxtPreviewScreen({super.key, required this.file});
+  const TxtPreviewScreen({super.key, required this.file, this.padding = const EdgeInsets.only(bottom: 68)});
 
   @override
   TxtPreviewScreenState createState() => TxtPreviewScreenState();
@@ -26,6 +29,7 @@ class TxtPreviewScreenState extends State<TxtPreviewScreen> {
   }
 
   @override
+
   /// Called when the [TxtPreviewScreen] widget is updated. If the [File] being
   /// displayed has changed, this method reads the new file and updates the
   /// [txtData] future with the new data.
@@ -65,9 +69,10 @@ class TxtPreviewScreenState extends State<TxtPreviewScreen> {
           return Scaffold(
               body: AnimatedSwitcher(
                   duration: const Duration(milliseconds: 280),
-                  child: Text(snapshot.hasData
-                      ? snapshot.requireData
-                      : "No TXT Data Loaded")));
+                  child: Padding(
+                    padding: widget.padding!,
+                    child: Text(snapshot.hasData ? snapshot.requireData : "No TXT Data Loaded"),
+                  )));
         });
   }
 }
