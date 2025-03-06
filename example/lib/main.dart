@@ -40,7 +40,7 @@ class FileViewerScreenState extends State<FileViewerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Universal File Viewer Test')),
+      appBar: AppBar(title: const Text('Universal File Viewer Example')),
       body: Column(
         children: [
           ElevatedButton(

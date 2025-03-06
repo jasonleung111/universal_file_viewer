@@ -53,16 +53,19 @@ class ExcelCSVPreviewScreenState extends State<ExcelCSVPreviewScreen> {
   Future<List<List<String>>> readExcelFile(File file) async {
     try {
       if (kIsWeb) {
-        Uint8List fileBytes = await file.readAsBytes(); //Read file bytes in the main thread
+        Uint8List fileBytes =
+            await file.readAsBytes(); //Read file bytes in the main thread
         return _parseExcelData(fileBytes); //Runs synchronously on Web
       } else {
         final FileType fileType = detectFileType(file.path)!;
         if (fileType == FileType.excel) {
-          Uint8List fileBytes = await file.readAsBytes(); //Read file bytes in the main thread
+          Uint8List fileBytes =
+              await file.readAsBytes(); //Read file bytes in the main thread
 
           return await compute(_parseExcelData, fileBytes);
         } else {
-          String csvString = await file.readAsString(); //Read file as String in the main thread
+          String csvString = await file
+              .readAsString(); //Read file as String in the main thread
 
           return await compute(_parseCSVString, csvString);
         }
@@ -85,22 +88,27 @@ class ExcelCSVPreviewScreenState extends State<ExcelCSVPreviewScreen> {
           padding: widget.padding,
           child: FutureBuilder<List<List<String>>>(
             future: _excelData,
-            builder: (BuildContext context, AsyncSnapshot<List<List<String>>> snapshot) {
+            builder: (BuildContext context,
+                AsyncSnapshot<List<List<String>>> snapshot) {
               return AnimatedSwitcher(
                 duration: const Duration(milliseconds: 280),
                 child: snapshot.hasData
                     ? Theme(
-                        data: Theme.of(context).copyWith(cardTheme: const CardTheme(elevation: 0)),
+                        data: Theme.of(context)
+                            .copyWith(cardTheme: const CardTheme(elevation: 0)),
                         child: PaginatedDataTable(
                           columns: <DataColumn>[
                             const DataColumn(label: Text("  ")),
                             ...snapshot.requireData.first.map(
                               (String header) => DataColumn(
-                                label: Text(header == 'null' ? '' : header, style: const TextStyle(fontWeight: FontWeight.bold)),
+                                label: Text(header == 'null' ? '' : header,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold)),
                               ),
                             ),
                           ],
-                          source: _ExcelDataSource(snapshot.requireData.sublist(1)),
+                          source:
+                              _ExcelDataSource(snapshot.requireData.sublist(1)),
                           rowsPerPage: 100,
                           showFirstLastButtons: true,
                           showEmptyRows: true,
@@ -113,7 +121,8 @@ class ExcelCSVPreviewScreenState extends State<ExcelCSVPreviewScreen> {
                     : GridView.builder(
                         shrinkWrap: true,
                         itemCount: 100,
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 5,
                           crossAxisSpacing: 2,
                           mainAxisSpacing: 2,
@@ -127,7 +136,8 @@ class ExcelCSVPreviewScreenState extends State<ExcelCSVPreviewScreen> {
                             child: Container(
                               width: double.infinity,
                               height: double.infinity,
-                              decoration: const BoxDecoration(color: Colors.white),
+                              decoration:
+                                  const BoxDecoration(color: Colors.white),
                             ),
                           );
                         },
@@ -159,7 +169,9 @@ class _ExcelDataSource extends DataTableSource {
   }
 
   DataCell _buildDataCell(String text, {bool isHeader = false}) =>
-      DataCell(Text(text == 'null' ? '' : text, style: TextStyle(fontWeight: isHeader ? FontWeight.w300 : FontWeight.normal)));
+      DataCell(Text(text == 'null' ? '' : text,
+          style: TextStyle(
+              fontWeight: isHeader ? FontWeight.w300 : FontWeight.normal)));
 
   @override
   bool get isRowCountApproximate => false;
@@ -179,7 +191,9 @@ List<List<String>> _parseExcelData(Uint8List fileBytes) {
   for (String table in excel.tables.keys) {
     for (List<exc.Data?> row in excel.tables[table]!.rows) {
       extractedData.add(
-        row.map((exc.Data? cell) => cell?.value?.toString() ?? "").toList(), // ✅ Extract only Strings
+        row
+            .map((exc.Data? cell) => cell?.value?.toString() ?? "")
+            .toList(), // ✅ Extract only Strings
       );
     }
   }
@@ -224,7 +238,10 @@ String _detectDelimiter(String content) {
     delimiterCount[delim] = sampleLine.split(delim).length - 1;
   }
 
-  return delimiterCount.entries.reduce((MapEntry<String, int> a, MapEntry<String, int> b) => a.value > b.value ? a : b).key;
+  return delimiterCount.entries
+      .reduce((MapEntry<String, int> a, MapEntry<String, int> b) =>
+          a.value > b.value ? a : b)
+      .key;
 }
 
 List<String> _splitRow(String row, String delimiter) {
