@@ -14,7 +14,10 @@ class MdPreviewScreen extends StatefulWidget {
   final EdgeInsets? padding;
 
   /// Creates a [MdPreviewScreen] widget.
-  const MdPreviewScreen({super.key, required this.file, this.padding = const EdgeInsets.only(bottom: 68)});
+  const MdPreviewScreen(
+      {super.key,
+      required this.file,
+      this.padding = const EdgeInsets.only(bottom: 68)});
 
   @override
   MdPreviewScreenState createState() => MdPreviewScreenState();
@@ -55,7 +58,8 @@ class MdPreviewScreenState extends State<MdPreviewScreen> {
       setState(() {
         mdData = mdContent;
         rawHtml = markdown.markdownToHtml(mdData);
-        _controller.loadRequest(Uri.dataFromString(rawHtml, mimeType: 'text/html', encoding: Encoding.getByName('utf-8')));
+        _controller.loadRequest(Uri.dataFromString(rawHtml,
+            mimeType: 'text/html', encoding: Encoding.getByName('utf-8')));
       });
     } catch (e) {
       debugPrint("Error reading MD file: $e");
@@ -78,7 +82,10 @@ class MdPreviewScreenState extends State<MdPreviewScreen> {
     return Scaffold(
         body: Padding(
       padding: widget.padding!,
-      child: Center(child: rawHtml.isNotEmpty ? WebViewWidget(controller: _controller) : const Text("No MD Data Loaded")),
+      child: Center(
+          child: rawHtml.isNotEmpty
+              ? WebViewWidget(controller: _controller)
+              : const Text("No MD Data Loaded")),
     ));
   }
 }

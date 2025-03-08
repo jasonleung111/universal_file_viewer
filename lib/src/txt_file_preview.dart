@@ -11,7 +11,10 @@ class TxtPreviewScreen extends StatefulWidget {
   final EdgeInsets? padding;
 
   /// Creates a [TxtPreviewScreen] widget.
-  const TxtPreviewScreen({super.key, required this.file, this.padding = const EdgeInsets.only(bottom: 68)});
+  const TxtPreviewScreen(
+      {super.key,
+      required this.file,
+      this.padding = const EdgeInsets.only(bottom: 68)});
 
   @override
   TxtPreviewScreenState createState() => TxtPreviewScreenState();
@@ -71,7 +74,9 @@ class TxtPreviewScreenState extends State<TxtPreviewScreen> {
                   duration: const Duration(milliseconds: 280),
                   child: Padding(
                     padding: widget.padding!,
-                    child: Text(snapshot.hasData ? snapshot.requireData : "No TXT Data Loaded"),
+                    child: Text(snapshot.hasData
+                        ? snapshot.requireData
+                        : "No TXT Data Loaded"),
                   )));
         });
   }

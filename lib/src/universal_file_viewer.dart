@@ -16,7 +16,11 @@ class UniversalFileViewer extends StatelessWidget {
   final EdgeInsets? padding;
   final Color backgroundColor;
 
-  const UniversalFileViewer({super.key, required this.file, this.padding, this.backgroundColor = Colors.white});
+  const UniversalFileViewer(
+      {super.key,
+      required this.file,
+      this.padding,
+      this.backgroundColor = Colors.white});
 
   /// Builds a widget that displays the file at [file].
   ///
@@ -30,11 +34,18 @@ class UniversalFileViewer extends StatelessWidget {
       final fileType = detectFileType(file.path)!;
       switch (fileType) {
         case FileType.image:
-          return Container(padding: padding, color: backgroundColor, child: Center(child: Image.file(file)));
+          return Container(
+              padding: padding,
+              color: backgroundColor,
+              child: Center(child: Image.file(file)));
         case FileType.video:
-          return Container(padding: padding, color: backgroundColor, child: VideoPlayerWidget(file: file));
+          return Container(
+              padding: padding,
+              color: backgroundColor,
+              child: VideoPlayerWidget(file: file));
         case FileType.pdf:
-          return PdfViewer.file(file.path, params: const PdfViewerParams(margin: 32));
+          return PdfViewer.file(file.path,
+              params: const PdfViewerParams(margin: 32));
         case FileType.word:
           return DocxToFlutter(file: file, padding: padding);
         case FileType.excel:
