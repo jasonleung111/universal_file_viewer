@@ -12,9 +12,11 @@ import 'package:universal_file_viewer/universal_file_viewer.dart';
 class ExcelCSVPreviewScreen extends StatefulWidget {
   /// The Excel file to display.
   final File file;
+  /// The padding inside the scroll for the table
+  final EdgeInsets? padding;
 
   /// Creates a [ExcelCSVPreviewScreen] widget.
-  const ExcelCSVPreviewScreen({super.key, required this.file});
+  const ExcelCSVPreviewScreen({super.key, required this.file, this.padding = const EdgeInsets.only(bottom: 68)});
 
   @override
   ExcelCSVPreviewScreenState createState() => ExcelCSVPreviewScreenState();
@@ -83,7 +85,7 @@ class ExcelCSVPreviewScreenState extends State<ExcelCSVPreviewScreen> {
         thumbVisibility: true,
         child: SingleChildScrollView(
           controller: _verticalController,
-          padding: const EdgeInsets.only(bottom: 68),
+          padding: widget.padding,
           child: FutureBuilder<List<List<String>>>(
             future: _excelData,
             builder: (BuildContext context,

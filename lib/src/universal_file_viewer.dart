@@ -13,8 +13,10 @@ import 'md_file_preview.dart';
 
 class UniversalFileViewer extends StatelessWidget {
   final File file;
+  final EdgeInsets? padding;
+  final Color backgroundColor;
 
-  const UniversalFileViewer({super.key, required this.file});
+  const UniversalFileViewer({super.key, required this.file, this.padding, this.backgroundColor = Colors.white});
 
   /// Builds a widget that displays the file at [file].
   ///
@@ -28,21 +30,20 @@ class UniversalFileViewer extends StatelessWidget {
       final fileType = detectFileType(file.path)!;
       switch (fileType) {
         case FileType.image:
-          return Center(child: Image.file(file));
+          return Container(padding: padding, color: backgroundColor, child: Center(child: Image.file(file)));
         case FileType.video:
-          return VideoPlayerWidget(file: file);
+          return Container(padding: padding, color: backgroundColor, child: VideoPlayerWidget(file: file));
         case FileType.pdf:
-          return PdfViewer.file(file.path);
+          return PdfViewer.file(file.path, params: const PdfViewerParams(margin: 32));
         case FileType.word:
-          return DocxToFlutter(file: file);
+          return DocxToFlutter(file: file, padding: padding);
         case FileType.excel:
-          return ExcelCSVPreviewScreen(file: file);
         case FileType.csv:
-          return ExcelCSVPreviewScreen(file: file);
+          return ExcelCSVPreviewScreen(file: file, padding: padding);
         case FileType.text:
-          return TxtPreviewScreen(file: file);
+          return TxtPreviewScreen(file: file, padding: padding);
         case FileType.md:
-          return MdPreviewScreen(file: file);
+          return MdPreviewScreen(file: file, padding: padding);
       }
     } else {
       return const Center(

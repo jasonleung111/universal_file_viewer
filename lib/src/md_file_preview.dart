@@ -10,8 +10,11 @@ class MdPreviewScreen extends StatefulWidget {
   /// The MD file to display.
   final File file;
 
+  /// The padding inside the scroll for the document
+  final EdgeInsets? padding;
+
   /// Creates a [MdPreviewScreen] widget.
-  const MdPreviewScreen({super.key, required this.file});
+  const MdPreviewScreen({super.key, required this.file, this.padding = const EdgeInsets.only(bottom: 68)});
 
   @override
   MdPreviewScreenState createState() => MdPreviewScreenState();
@@ -52,8 +55,7 @@ class MdPreviewScreenState extends State<MdPreviewScreen> {
       setState(() {
         mdData = mdContent;
         rawHtml = markdown.markdownToHtml(mdData);
-        _controller.loadRequest(Uri.dataFromString(rawHtml,
-            mimeType: 'text/html', encoding: Encoding.getByName('utf-8')));
+        _controller.loadRequest(Uri.dataFromString(rawHtml, mimeType: 'text/html', encoding: Encoding.getByName('utf-8')));
       });
     } catch (e) {
       debugPrint("Error reading MD file: $e");
@@ -74,9 +76,9 @@ class MdPreviewScreenState extends State<MdPreviewScreen> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(
-            child: rawHtml.isNotEmpty
-                ? WebViewWidget(controller: _controller)
-                : const Text("No MD Data Loaded")));
+        body: Padding(
+      padding: widget.padding!,
+      child: Center(child: rawHtml.isNotEmpty ? WebViewWidget(controller: _controller) : const Text("No MD Data Loaded")),
+    ));
   }
 }
