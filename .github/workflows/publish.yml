@@ -1,0 +1,50 @@
+name: Publish to pub.dev
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+*' # Runs only when a tag like v1.0.0 is pushed
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.24.5 # Use your Flutter version
+
+      - name: Setup Dart SDK
+        uses: dart-lang/setup-dart@v1
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      # Run dart format to check if code is properly formatted
+      - name: Check Dart Formatting
+        run: dart format --set-exit-if-changed .
+
+      # Run static analysis to check for errors or warnings
+      - name: Run Dart Analysis
+        run: dart analyze
+
+      # Run dry-run before publishing to check for issues
+      - name: Run Dry-Run for Publishing
+        run: dart pub publish --dry-run
+
+      # Publish package to pub.dev
+      - name: Publish package
+        env:
+          PUB_DEV_TOKEN: ${{ secrets.PUB_DEV_TOKEN }}
+        run: |
+          mkdir -p ~/.pub-cache
+          cat <<EOF > ~/.pub-cache/credentials.json
+          {
+            "accessToken": "${{ secrets.PUB_DEV_TOKEN }}"
+          }
+          EOF
+          dart pub publish --force
