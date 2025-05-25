@@ -98,8 +98,8 @@ class ExcelCSVPreviewScreenState extends State<ExcelCSVPreviewScreen> {
                 duration: const Duration(milliseconds: 280),
                 child: snapshot.hasData
                     ? Theme(
-                        data: Theme.of(context)
-                            .copyWith(cardTheme: const CardTheme(elevation: 0)),
+                        data: Theme.of(context).copyWith(
+                            cardTheme: const CardThemeData(elevation: 0)),
                         child: PaginatedDataTable(
                           columns: <DataColumn>[
                             const DataColumn(label: Text("  ")),
