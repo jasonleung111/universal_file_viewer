@@ -20,7 +20,7 @@ FileType? detectFileType(String path) {
 
   if (<String>['.docx'].contains(extension)) {
     return FileType.word;
-  } else if (<String>['.xls', '.xlsx'].contains(extension)) {
+  } else if (<String>['.xlsx'].contains(extension)) {
     return FileType.excel;
   } else if (extension == '.csv') {
     return FileType.csv;
