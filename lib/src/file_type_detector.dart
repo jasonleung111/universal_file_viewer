@@ -18,7 +18,7 @@ enum FileType { word, excel, csv, text, md }
 FileType? detectFileType(String path) {
   final String extension = p.extension(path).toLowerCase();
 
-  if (<String>['.doc', '.docx'].contains(extension)) {
+  if (<String>['.docx'].contains(extension)) {
     return FileType.word;
   } else if (<String>['.xls', '.xlsx'].contains(extension)) {
     return FileType.excel;
@@ -28,7 +28,7 @@ FileType? detectFileType(String path) {
   /*else if (<String>['.ppt', '.pptx'].contains(extension)) {
     return FileType.ppt;*/
 
-  else if (<String>['.txt'].contains(extension)) {
+  else if (<String>['.txt', '.json'].contains(extension)) {
     return FileType.text;
   } else if (<String>['.md'].contains(extension)) {
     return FileType.md;
